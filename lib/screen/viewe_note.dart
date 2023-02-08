@@ -33,7 +33,7 @@ class _VieweNoteState extends State<VieweNote> {
           ));
           refreshNote();
         },
-        icon: const Icon(Icons.edit_outlined),
+        icon: const Icon(Icons.edit_note),
       );
   Widget deleteButton() => IconButton(
         onPressed: () async {
@@ -41,13 +41,35 @@ class _VieweNoteState extends State<VieweNote> {
           await NotesDatabase.instance.deleteNote(widget.noteId);
           navigator.pop();
         },
-        icon: const Icon(Icons.delete),
+        icon: const Icon(Icons.playlist_remove_outlined),
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Viewe Note')),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text(
+          'Viewe Note',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+            color: Colors.black87,
+            fontFamily: 'title2',
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black87),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -56,11 +78,26 @@ class _VieweNoteState extends State<VieweNote> {
               padding: const EdgeInsets.all(8),
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                children: [
-                  Text(notes.title.toString()),
-                  Text(notes.description.toString()),
+                children: <Widget>[
+                  Text(
+                    notes.title.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'iransans',
+                    ),
+                  ),
+                  const Divider(thickness: 1.5, indent: 50, endIndent: 50),
+                  Text(
+                    notes.description.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontFamily: 'iransans',
+                    ),
+                  ),
+                  const SizedBox(height: 50),
                   Row(
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
                       editButton(),
                       deleteButton(),
                     ],

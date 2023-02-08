@@ -131,10 +131,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       style: const TextStyle(
                                         fontSize: 13,
                                         color: Colors.grey,
-                                        fontFamily: 'tit',
                                         fontWeight: FontWeight.w400,
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
