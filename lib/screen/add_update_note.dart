@@ -12,26 +12,25 @@ class AddUpdateNote extends StatefulWidget {
 
 class _AddUpdateNoteState extends State<AddUpdateNote> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String title;
-  late String description;
+  late String? title;
+  late String? description;
+  late String? time;
 
   @override
   void initState() {
-    title = widget.notes?.title ?? '';
-    description = widget.notes?.description ?? '';
+    title = widget.notes?.title ?? "";
+    description = widget.notes?.description ?? "";
+    time = widget.notes?.time ?? "";
 
     super.initState();
   }
 
   Widget buildButton() {
-    final isFormValid = title.isNotEmpty && description.isNotEmpty;
+    final isFormValid = title!.isNotEmpty && description!.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ElevatedButton(
-        onPressed: addOrUpdateNote,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: isFormValid ? null : Colors.grey.shade500,
-        ),
+        onPressed: isFormValid ? addOrUpdateNote : null,
         child: const Text('Save'),
       ),
     );
@@ -40,30 +39,35 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
   void addOrUpdateNote() async {
     final isValid = _formKey.currentState!.validate();
     final navigator = Navigator.of(context).pop();
+    final date = DateTime.now();
+    final time =
+        "${date.hour}:${date.minute}   ${date.year}-${date.month}-${date.day}";
 
     if (isValid) {
       final isUpdating = widget.notes != null;
       if (isUpdating) {
-        await updateNote();
+        await updateNote(time);
       } else {
-        await addNote();
+        await addNote(time);
       }
       navigator;
     }
   }
 
-  Future addNote() async {
+  Future addNote(String time) async {
     final note = Note(
       title: title,
       description: description,
+      time: time,
     );
     await NotesDatabase.instance.create(note);
   }
 
-  Future updateNote() async {
+  Future updateNote(String time) async {
     final note = widget.notes!.copy(
       title: title,
       description: description,
+      time: time,
     );
 
     await NotesDatabase.instance.updateNote(note);
@@ -91,10 +95,10 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
                       ),
                     ),
                   ),
-                  validator: (title) {
-                    title != null && title.isEmpty
-                        ? 'The Title Cannot be Empty'
-                        : null;
+                  validator: (String? title) {
+                    if (title!.isEmpty) {
+                      return 'The Title Cannot be Empty';
+                    }
                   },
                   onChanged: (String title) {
                     setState(() {
@@ -115,9 +119,9 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
                     ),
                   ),
                   validator: (description) {
-                    description != null && description.isEmpty
-                        ? 'The Description Cannot be Empty'
-                        : null;
+                    if (description!.isEmpty) {
+                      return 'The Title Cannot be Empty';
+                    }
                   },
                   onChanged: (String description) {
                     setState(() {

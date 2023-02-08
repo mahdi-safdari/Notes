@@ -27,12 +27,8 @@ class NotesDatabase {
     CREATE TABLE $tableNotes (
       ${NotesFields.id} $idType,
       ${NotesFields.title} $textType,
-      ${NotesFields.description} $textType) ''');
-    //* String sql = '''
-    //*   CREATE TABLE notes (
-    //*     _id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //*    _title TEXT NOT NULL,
-    //*     _description TEXT NOT NULL) ''';
+      ${NotesFields.description} $textType,
+      ${NotesFields.time} $textType) ''');
   }
 
   Future<Note> create(Note note) async {
