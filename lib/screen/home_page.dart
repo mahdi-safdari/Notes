@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('NO DATA'),
                     )
                   : ListView.builder(
+                      reverse: true,
                       itemCount: notes?.length,
                       itemBuilder: (BuildContext context, int index) {
                         final title = notes![index]!.title ?? "No title";

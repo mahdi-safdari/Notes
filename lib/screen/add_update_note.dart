@@ -12,16 +12,40 @@ class AddUpdateNote extends StatefulWidget {
 
 class _AddUpdateNoteState extends State<AddUpdateNote> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String? title;
-  late String? description;
+  late String title;
+  late String description;
   late String? time;
-  late bool fnTitle = title!.codeUnits.first > 122;
-  late bool fnDescription = description!.codeUnits.first > 122;
+  late bool fnTitle = title.codeUnits.first > 122;
+  late bool fnDescription = description.codeUnits.first > 122;
+
+  bool checkTitle(String? title) {
+    if (title!.isNotEmpty) {
+      if (title.codeUnits.first > 122) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  bool checkDescription(String? description) {
+    if (description!.isNotEmpty) {
+      if (description.codeUnits.first > 122) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   @override
   void initState() {
-    title = widget.notes?.title ?? " ";
-    description = widget.notes?.description ?? " ";
+    title = widget.notes?.title ?? "";
+    description = widget.notes?.description ?? "";
     final date = DateTime.now();
     final timee =
         "${date.hour}:${date.minute}   ${date.year}-${date.month}-${date.day}";
@@ -31,7 +55,7 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
   }
 
   Widget buildButton() {
-    final isFormValid = title!.isNotEmpty && description!.isNotEmpty;
+    final isFormValid = title.isNotEmpty && description.isNotEmpty;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ElevatedButton(
@@ -130,7 +154,8 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
                   maxLines: 3,
                   style: const TextStyle(fontSize: 18),
                   initialValue: title,
-                  textAlign: fnTitle ? TextAlign.right : TextAlign.left,
+                  textAlign:
+                      checkTitle(title) ? TextAlign.right : TextAlign.left,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: 'Title...',
@@ -163,7 +188,9 @@ class _AddUpdateNoteState extends State<AddUpdateNote> {
                 child: TextFormField(
                   maxLines: 15,
                   style: const TextStyle(fontSize: 18),
-                  textAlign: fnDescription ? TextAlign.right : TextAlign.left,
+                  textAlign: checkDescription(description)
+                      ? TextAlign.right
+                      : TextAlign.left,
                   initialValue: description,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
